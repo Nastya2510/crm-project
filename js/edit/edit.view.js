@@ -24,4 +24,9 @@ function renderRequest(request){
     elements.status.value = request.status
 }
 
-export {renderRequest}
+function getFormInput(){
+    //Создать объект класса на основе формы!
+    return new FormData(elements.form)
+}
+
+export {elements, renderRequest, getFormInput}

@@ -1,7 +1,9 @@
 //Сразу выберем и опишем элементы, с которыми тут будем работать
 //elements - это объект, в котором опишем таблицу
 const elements = {
-    table: document.querySelector('#tbody')
+    table: document.querySelector('#tbody'),
+    select: document.querySelector('#productSelect'),
+    topStatusBar: document.querySelector('#topStatusBar'),
 }
 
 
@@ -40,4 +42,9 @@ function renderRequests(requests){
     }
 }
 
-export {elements, renderRequests}
+function updateTopStatusBar(value){
+    elements.topStatusBar.querySelectorAll('a').forEach((link) => link.classList.remove('active'))
+    elements.topStatusBar.querySelector(`a[data-value="${value}"]`).classList.add('active')
+}
+
+export {elements, renderRequests, updateTopStatusBar}
