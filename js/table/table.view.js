@@ -4,6 +4,11 @@ const elements = {
     table: document.querySelector('#tbody'),
     select: document.querySelector('#productSelect'),
     topStatusBar: document.querySelector('#topStatusBar'),
+    leftStatusLinks: document.querySelectorAll('[data-role="left-status"]'),
+    leftPanelNav: document.querySelector('.left-panel__navigation'),
+    badgeNew: document.querySelector('#badge-new'),
+    badgeInwork: document.querySelector('#badge-inwork'),
+    badgeComplete: document.querySelector('#badge-complete')
 }
 
 
@@ -43,8 +48,41 @@ function renderRequests(requests){
 }
 
 function updateTopStatusBar(value){
+    //Меняем топ статус бар
     elements.topStatusBar.querySelectorAll('a').forEach((link) => link.classList.remove('active'))
     elements.topStatusBar.querySelector(`a[data-value="${value}"]`).classList.add('active')
+
+    //Левое навигационное меню
+    elements.leftStatusLinks.forEach((link) => link.classList.remove('active'))
+    elements.leftPanelNav.querySelector(`a[data-value="${value}"]`).classList.add('active')
 }
 
-export {elements, renderRequests, updateTopStatusBar}
+function renderBadgeNew(valueNew, valueInWork, valueComplete){
+    elements.badgeNew.innerText = valueNew
+    elements.badgeInwork.innerText = valueInWork
+    elements.badgeComplete.innerText = valueComplete
+    
+    valueNew == 0 ? elements.badgeNew.classList.add('none') : elements.badgeNew.classList.remove('none')
+    valueInWork == 0 ? elements.badgeInwork.classList.add('none') : elements.badgeInwork.classList.remove('none')
+    valueComplete == 0 ? elements.badgeComplete.classList.add('none') : elements.badgeComplete.classList.remove('none')
+
+    // if (valueInWork == 0){
+    //     elements.badgeInwork.classList.add('none')
+    // } else {
+    //     elements.badgeInwork.classList.remove('none')
+    // }
+}
+
+function updateFilter(filter){
+    //Фильтр по продукту, выпадающий список
+    elements.select.value = filter.products
+    //Топ статус бар
+    elements.topStatusBar.querySelectorAll('a').forEach((link) => link.classList.remove('active'))
+    elements.topStatusBar.querySelector(`a[data-value="${filter.status}"]`).classList.add('active')
+    //Ссылки слева
+    elements.leftStatusLinks.forEach((link) => link.classList.remove('active'))
+    elements.leftPanelNav.querySelector(`a[data-value="${filter.status}"]`).classList.add('active')
+}
+
+
+export {elements, renderRequests, updateTopStatusBar, renderBadgeNew, updateFilter}

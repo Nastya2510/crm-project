@@ -30,15 +30,25 @@ const statuses = {
 }
 
 //Объект, который описывает текущи фильтр по двум параметрам
-const filter = {
-    products: 'all',
-    status: 'all'
-}
+const filter = loadFilter()
 
+function loadFilter(){
+    let filter = {
+        products: 'all',
+        status: 'all'
+    }
+
+    if (localStorage.getItem('filter')){
+        filter = JSON.parse(localStorage.getItem('filter'))
+    }
+
+    return filter
+}
 
 //Фун принимает свойства фильтра (products/status) и меняет их. Обновляет фильтр и возвращает его же
 function changeFilter(prop, value){
     filter[prop] = value
+    localStorage.setItem('filter', JSON.stringify(filter))
     return filter
 }
 
@@ -59,8 +69,26 @@ function filteredRequests(filter){
         filteredRequests = filteredRequests.filter((request) => request.status === filter.status)
     }
 
-
     return prepareRequests(filteredRequests)
+}
+
+//Бейджек с заявками
+function countNewRequests(){
+    //Отфильтровать заявки по статусу и узнать длину массива
+    const newRequests = requests.filter((el) => el.status === "new")
+    return newRequests.length
+}
+
+function countNewRequestsWork(){
+    //Отфильтровать заявки по статусу и узнать длину массива
+    const newRequests = requests.filter((el) => el.status === "inwork")
+    return newRequests.length
+}
+
+function countNewRequestsComplete(){
+    //Отфильтровать заявки по статусу и узнать длину массива
+    const newRequests = requests.filter((el) => el.status === "complete")
+    return newRequests.length
 }
 
 //Добавить заявку
@@ -90,7 +118,7 @@ function loadRequests(){
 
 //Вернуть заявки
 function getRequests(){
-    return prepareRequests(requests)
+    return filteredRequests(filter)
 }
 
 //Обработка заявок. Данные представляются в определенном формате
@@ -131,4 +159,9 @@ function updateRequest(formData){
     window.location = '/table.html'
 }
 
-export {addRequest, getRequests, getRequestById, updateRequest, changeFilter, filteredRequests}
+function getFilter(){
+    //возвращает новый объект, в который деструктурировал объект фильтр, т.е. копирует
+    return filter
+}
+
+export {addRequest, getRequests, getRequestById, updateRequest, changeFilter, filteredRequests, countNewRequests, countNewRequestsWork, countNewRequestsComplete, getFilter}
